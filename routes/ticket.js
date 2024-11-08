@@ -1,7 +1,7 @@
 var express = require("express");
 var router = express.Router();
 
-let ticketController = require("../controllers/ticket");
+let ticketController = require("../controllers/ticketController");
 let authController = require("../controllers/auth");
 
 /* GET ticket listing. */
