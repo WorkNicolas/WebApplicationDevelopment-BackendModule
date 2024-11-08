@@ -14,7 +14,7 @@ const TicketSchema = new Schema(
             required: priorityEnum,
         },
         userId: {
-            type: String,
+            type: mongoose.Schema.Types.ObjectId,
             ref: "User",
             required: "User ID is required",
         },
