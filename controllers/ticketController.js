@@ -1,5 +1,4 @@
-const Ticket = require("../models/Ticket");
-let TicketModel = require("../models/Ticket");
+const TicketModel = require("../models/Ticket");
 
 module.exports.create = async function (req, res, next) {
     try {
@@ -37,11 +36,11 @@ module.exports.ticketGet = async function (req, res, next) {
         console.log(error);
         next(error);
     }
-}
+};
 
 module.exports.ticketByID = async function (req, res, next) {
     res.json(req.ticket);
-}
+};
 
 module.exports.update = async function (req, res, next) {
     try {
@@ -76,7 +75,7 @@ module.exports.remove = async function (req, res, next) {
         if (result.deletedCount > 0) {
             res.json({
                 success: true,
-                message: "Ticke deleted successfully.",
+                message: "Ticket deleted successfully.",
             });
         } else {
             // Express will catch this on its own
