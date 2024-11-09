@@ -1,14 +1,16 @@
-var createError = require("http-errors");
-var express = require("express");
-var path = require("path");
-var cookieParser = require("cookie-parser");
-var logger = require("morgan");
+const createError = require("http-errors");
+const express = require("express");
+const path = require("path");
+const cookieParser = require("cookie-parser");
+const logger = require("morgan");
 
 // import routers
-var indexRouter = require("../routes/index");
-var usersRouter = require("../routes/users");
+const indexRouter = require("../routes/index");
+const usersRouter = require("../routes/users");
+const ticketRouter = require("../routes/tickets");
+const ticketIterationRouter = require("../routes/ticketIterations"); 
 
-var app = express();
+const app = express();
 
 app.use(logger("dev"));
 app.use(express.json());
@@ -17,7 +19,9 @@ app.use(cookieParser());
 
 // add routes
 app.use("/", indexRouter);
-app.use("/users", usersRouter);
+app.use("/api/users", usersRouter);
+app.use("/api/ticket", ticketRouter);
+app.use("/api/ticketIteration", ticketIterationRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
