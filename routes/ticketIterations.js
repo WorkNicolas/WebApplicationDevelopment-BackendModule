@@ -2,9 +2,11 @@ const express = require('express');
 const router = express.Router();
 
 const ticketIterationController = require('../controllers/ticketIterationController');
-router.post('/', ticketIterationController.create);
-router.get('/', ticketIterationController.list);
-router.get('/:ticketIterationID', ticketIterationController.ticketIterationGet, ticketIterationController.ticketIterationById);
+const { requireSignin } = require('../controllers/authController');
+const { requireAdmin } = require('../middlewares/admin');
+router.post('/', requireSignin, requireAdmin, ticketIterationController.create);
+router.get('/', requireSignin, requireAdmin, ticketIterationController.list);
+router.get('/:ticketIterationID', requireSignin, requireAdmin, ticketIterationController.ticketIterationGet, ticketIterationController.ticketIterationById);
 router.put('/:ticketIterationID', ticketIterationController.update);
 router.delete('/:ticketIterationID', ticketIterationController.remove);
 
