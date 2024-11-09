@@ -38,3 +38,14 @@ module.exports.requireSignin = expressjwt({
   algorithms: ["HS512"],
   userProperty: "auth",
 });
+
+module.exports.requireAdmin = function (req, res, next) {
+  if (req.user && req.user.role === 'admin') {
+      next();
+  } else {
+      return res.status(403).json({
+          success: false,
+          message: "Access denied."
+      })
+  }
+};
