@@ -14,9 +14,13 @@ router.post("/signin", authController.signin);
 router.get("/list", usersController.list);
 router.post("/create", usersController.create);
 router.get("/get/:userID", usersController.userGet, usersController.userByID);
-router.put("/edit/:userID", usersController.update);
 
-// need to be signed in to delete
+// requires signing in
+router.put(
+  "/edit/:userID",
+  authController.requireSignin,
+  usersController.update
+);
 router.delete(
   "/delete/:userID",
   authController.requireSignin,

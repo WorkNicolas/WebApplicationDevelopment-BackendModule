@@ -7,7 +7,7 @@ const UserSchema = new Schema(
     username: {
       type: String,
       unique: true,
-      required: "Username is required.",
+      required: true,
       trim: true,
     },
     email: {
@@ -17,7 +17,7 @@ const UserSchema = new Schema(
     },
     hashed_password: {
       type: String,
-      required: "Password is required.",
+      required: true,
     },
     salt: {
       type: String,

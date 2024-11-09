@@ -5,11 +5,11 @@ const TicketIterationSchema = new Schema(
     {
         ticketID: {
             type: mongoose.Schema.Types.ObjectId,
-            required: "Ticket ID is required."
+            required: true
         },
         username: {
             type: String,
-            required: "Username is required."
+            required: true
         },
         timestamp: {
             type: Date,
@@ -23,7 +23,7 @@ const TicketIterationSchema = new Schema(
         },
         comment: {
             type: String,
-            required: "Comment is required."
+            required: true
         }
     }
 )
