@@ -26,4 +26,6 @@ const TicketIterationSchema = new Schema(
             required: true
         }
     }
-)
+);
+
+module.exports = mongoose.model("TicketIteration", TicketIterationSchema);

@@ -7,7 +7,7 @@ const TicketSchema = new Schema(
     {
         description: {
             type: String,
-            required: "Description is required.",
+            required: true,
         },
         priority: {
             type: String,
@@ -16,7 +16,7 @@ const TicketSchema = new Schema(
         userId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "User",
-            required: "User ID is required.",
+            required: true,
         },
         status: {
             type: String,
