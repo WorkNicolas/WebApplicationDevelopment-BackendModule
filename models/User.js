@@ -7,17 +7,17 @@ const UserSchema = new Schema(
     username: {
       type: String,
       unique: true,
-      required: "Username is required",
+      required: "Username is required.",
       trim: true,
     },
     email: {
       type: String,
       unique: true,
-      match: [/.+\@.+\..+/, "Please fill a valid e-mail address"],
+      match: [/.+\@.+\..+/, "Please fill a valid e-mail address."],
     },
     hashed_password: {
       type: String,
-      required: "Password is required",
+      required: "Password is required.",
     },
     salt: {
       type: String,
