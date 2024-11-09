@@ -1,7 +1,7 @@
-let User = require("../models/users");
-let config = require("../config/config");
-let jwt = require("jsonwebtoken");
-let { expressjwt } = require("express-jwt");
+const User = require("../models/User");
+const config = require("../config/config");
+const jwt = require("jsonwebtoken");
+const { expressjwt } = require("express-jwt");
 
 module.exports.signin = async function (req, res, next) {
   try {
