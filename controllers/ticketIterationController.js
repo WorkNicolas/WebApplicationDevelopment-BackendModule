@@ -1,4 +1,4 @@
-const TicketIterationModel = require("..models/TicketIteration");
+const TicketIterationModel = require("../models/TicketIteration");
 
 module.exports.create = async function (req, res, next) {
     try {
