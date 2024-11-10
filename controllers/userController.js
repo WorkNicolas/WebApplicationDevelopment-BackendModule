@@ -119,4 +119,61 @@ module.exports.userByID = async function (req, res, next) {
  * @throws {Error} If the user is not found or if the update fails.
  * @returns {Object} A JSON response with a success message if the user is updated successfully, or an error message if the update fails.
  */
-m
+module.exports.update = async function (req, res, next) {
+  try {
+    let uID = req.params.userID;
+
+    let updateUser = new UserModel(req.body);
+    updateUser._id = uID;
+
+    let result = await UserModel.updateOne({ _id: uID }, updateUser);
+
+    if (result.modifiedCount > 0) {
+      res.json({
+        success: true,
+        message: "User updated successfully.",
+      });
+    } else {
+      // Express will catch this on its own.
+      throw new Error("User not updated. Are you sure it exists?");
+    }
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
+/**
+ * Deletes an existing user.
+ * 
+ * @function update
+ * @async
+ * @description This function deletes a user. It checks if the user exists and proceeds with the deletion, sending a success message if the delete is successful.
+ * @param {Object} req - The request object, which contains the user ID in the parameters and the updated data in the body.
+ * @param {Object} res - The response object, which sends the success or failure message.
+ * @param {function} next - The next middleware function to call if an error occurs.
+ * 
+ * @throws {Error} If the user is not found or if the update fails.
+ * @returns {Object} A JSON response with a success message if the user is updated successfully, or an error message if the update fails.
+ */
+module.exports.remove = async function (req, res, next) {
+  try {
+    let uID = req.params.userID;
+
+    let result = await UserModel.deleteOne({ _id: uID });
+
+    if (result.deletedCount > 0) {
+      res.json({
+        success: true,
+        message: "User deleted successfully.",
+      });
+    } else {
+      // Express will catch this on its own.
+      throw new Error("User not deleted. Are you sure it exists?");
+    }
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
