@@ -3,6 +3,9 @@ const router = express.Router();
 
 const ticketIterationController = require('../controllers/ticketIterationController');
 const authController = require("../controllers/authController");
+router.get("/", function (req, res, next) {
+    res.send("Respond with a ticket iteration resource");
+  });
 router.post('/create', authController.requireSignin, authController.requireSignin, ticketIterationController.create);
 router.get('/list', authController.requireSignin, authController.requireAdmin, ticketIterationController.list);
 router.get('/get/:ticketIterationID', authController.requireSignin, authController.requireAdmin, ticketIterationController.ticketIterationGet, ticketIterationController.ticketIterationById);
