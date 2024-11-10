@@ -39,13 +39,25 @@ module.exports.requireSignin = expressjwt({
   userProperty: "auth",
 });
 
-module.exports.requireAdmin = function (req, res, next) {
-  if (req.user && req.user.role === 'admin') {
-      next();
-  } else {
+// Admin Role Checker
+module.exports.requireAdmin = async function (req, res, next) {
+  try {
+    // Get user through auth id
+    let user = await User.findById(req.auth.id);
+
+    // Return error if no user is found or user role is not admin
+    if (!user || user.role !== "admin") {
       return res.status(403).json({
-          success: false,
-          message: "Access denied."
-      })
+        success: false,
+        message: "Access denied: User is not an admin.",
+      });
+    }
+    next();
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error.",
+    });
   }
 };
