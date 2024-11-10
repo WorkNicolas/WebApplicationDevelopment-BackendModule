@@ -146,7 +146,7 @@ module.exports.update = async function (req, res, next) {
 /**
  * Deletes an existing user.
  * 
- * @function update
+ * @function remove
  * @async
  * @description This function deletes a user. It checks if the user exists and proceeds with the deletion, sending a success message if the delete is successful.
  * @param {Object} req - The request object, which contains the user ID in the parameters and the updated data in the body.
