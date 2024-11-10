@@ -3,10 +3,10 @@ const router = express.Router();
 
 const ticketIterationController = require('../controllers/ticketIterationController');
 const authController = require("../controllers/authController");
-router.post('/', authController.requireSignin, authController.requireSignin, ticketIterationController.create);
-router.get('/', authController.requireSignin, authController.requireAdmin, ticketIterationController.list);
-router.get('/:ticketIterationID', authController.requireSignin, authController.requireAdmin, ticketIterationController.ticketIterationGet, ticketIterationController.ticketIterationById);
-router.put('/:ticketIterationID', authController.requireSignin, authController.requireAdmin, ticketIterationController.update);
-router.delete('/:ticketIterationID', authController.requireSignin, authController.requireAdmin, ticketIterationController.remove);
+router.post('/create', authController.requireSignin, authController.requireSignin, ticketIterationController.create);
+router.get('/list', authController.requireSignin, authController.requireAdmin, ticketIterationController.list);
+router.get('/get/:ticketIterationID', authController.requireSignin, authController.requireAdmin, ticketIterationController.ticketIterationGet, ticketIterationController.ticketIterationById);
+router.put('/edit/:ticketIterationID', authController.requireSignin, authController.requireAdmin, ticketIterationController.update);
+router.delete('/delete/:ticketIterationID', authController.requireSignin, authController.requireAdmin, ticketIterationController.remove);
 
 module.exports = router;

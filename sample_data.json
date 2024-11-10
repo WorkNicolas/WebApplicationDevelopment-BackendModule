@@ -1,21 +1,29 @@
 [
-    {
-      "username": "johndoe",
-      "email": "johndoe@example.com",
-      "hashed_password": "johndoe",
-      "role": "user"
-    },
-    {
-      "username": "janedoe",
-      "email": "janedoe@example.com",
-      "hashed_password": "janedoe",
-      "role": "admin"
-    },
-    {
-      "username": "bobsmith",
-      "email": "bobsmith@example.com",
-      "hashed_password": "bobsmith",
-      "role": "user"
-    }
-  ]
-  
+  {
+  "username": "john_doe",
+  "email": "john.doen@email.com",
+  "password": "password",
+  "role": "user"
+  },
+  {
+    "username": "jane_doe",
+    "email": "jane.doe@email.com",
+    "password": "password",
+    "role": "user"
+  }
+]
+
+[
+  {
+    "username": "user",
+    "email": "user@email.com",
+    "password": "password",
+    "role": "user"
+  },
+  {
+    "username": "admin",
+    "email": "admin@company.com",
+    "password": "password",
+    "role": "admin"
+  }
+]
