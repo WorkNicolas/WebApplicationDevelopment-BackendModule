@@ -6,7 +6,7 @@ const authController = require("../controllers/authController");
 
 /* GET users listing. */
 router.get("/", function (req, res, next) {
-  res.send("respond with a resource");
+  res.send("Respond with a user resource");
 });
 
 router.post("/signin", authController.signin);
