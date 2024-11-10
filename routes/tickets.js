@@ -36,26 +36,26 @@ router.post('/create', authController.requireSignin, ticketController.create);
  * @route GET /api/ticket/list
  * @description Lists all tickets in the system.
  */
-router.get('/list', ticketController.list);
+router.get('/list', authController.requireSignIn, authController.requireAdmin, ticketController.list);
 
 /**
  * @route GET /api/ticket/get/:ticketID
  * @description Retrieves a specific ticket by its ID.
  */
-router.get('/get/:ticketID', ticketController.ticketGet, ticketController.ticketByID);
+router.get('/get/:ticketID', auhtController.requireSignIn, authController.requireSameID, ticketController.ticketGet, ticketController.ticketByID);
 
 /**
  * @route PUT /api/ticket/edit/:ticketID
  * @description Updates a specific ticket. Requires user to be signed in.
  * @requiresAuth
  */
-router.put('/edit/:ticketID', authController.requireSignin, ticketController.update);
+router.put('/edit/:ticketID', authController.requireSignin, authContoller.requireSameID, ticketController.update);
 
 /**
  * @route DELETE /api/ticket/delete/:ticketID
  * @description Deletes a specific ticket. Requires user to be signed in.
  * @requiresAuth
  */
-router.delete('/delete/:ticketID', authController.requireSignin, ticketController.remove);
+router.delete('/delete/:ticketID', authController.requireSignin, authContoller.requireSameID, ticketController.remove);
 
 module.exports = router;

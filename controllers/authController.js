@@ -17,6 +17,7 @@
  * @requires express-jwt - for validating JWTs in requests
  */
 const User = require("../models/User");
+const Ticket = require("../models/Ticket");
 const config = require("../config/config");
 const jwt = require("jsonwebtoken");
 const { expressjwt } = require("express-jwt");
@@ -105,6 +106,42 @@ module.exports.requireAdmin = async function (req, res, next) {
         message: "Access denied: User is not an admin.",
       });
     }
+    next();
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error.",
+    });
+  }
+};
+
+/**
+ * Same ID Validation Middleware.
+ * 
+ * @function requireSameID
+ * @async
+ * @description Middleware to check if the authenticated user ID is stored in the ticket.
+ * @param {Object} req - The request object, which should contain the authenticated user's ID from the token.
+ * @param {Object} res - The response object, where an error message is sent if the user does not have access.
+ * @param {function} next - The next middleware function to call if the user has rights to the ticket.
+ * 
+ * @throws {Error} If the user does not have an admin role or is not found in the database.
+ * @returns {Object} A JSON response with a success message and access granted if the user is an admin.
+ */
+module.exports.requireSameID = async function (req, res, next) {
+  try {
+    // Get user through auth id
+    let user = await User.findById(req.auth.id);
+
+    // Check if the userId from the User model matches the userId from the Ticket model
+    if (!ticket || ticket.userId.toString() !== user._id.toString()) {
+      return res.status(403).json({
+        success: false,
+        message: "Access denied: User does not own this ticket.",
+      });
+    }
+
     next();
   } catch (error) {
     console.log(error);
