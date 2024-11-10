@@ -42,7 +42,7 @@ router.get('/list', authController.requireSignIn, authController.requireAdmin, t
  * @route GET /api/ticket/get/:ticketID
  * @description Retrieves a specific ticket by its ID.
  */
-router.get('/get/:ticketID', auhtController.requireSignIn, authController.requireSameID, ticketController.ticketGet, ticketController.ticketByID);
+router.get('/get/:ticketID', authController.requireSignIn, authController.requireSameID, ticketController.ticketGet, ticketController.ticketByID);
 
 /**
  * @route PUT /api/ticket/edit/:ticketID
