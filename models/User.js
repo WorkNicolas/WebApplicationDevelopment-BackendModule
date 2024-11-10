@@ -57,17 +57,24 @@ UserSchema.virtual("password").set(function (password) {
   }
 });
 
+// Password-Based Key Derivation Function 2 Algorithm
+// Salt makes hashes unique
+// Number of Iterations
+// Output of hash length
+// Cryptographic Hashing Algorithm
 UserSchema.methods.hashPassword = function (password) {
   return crypto
     .pbkdf2Sync(password, this.salt, 10000, 64, "sha512")
     .toString("base64");
 };
 
+// Compare hashed password.
 UserSchema.methods.authenticate = function (password) {
   return this.hashed_password === this.hashPassword(password);
 };
 
 // Ensure virtual fields are serialised.
+// Remove hashed password, id and salt from showing up.
 UserSchema.set("toJSON", {
   virtuals: true,
   versionKey: false,

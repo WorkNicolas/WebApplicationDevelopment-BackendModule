@@ -13,9 +13,6 @@ module.exports.create = async function (req, res, next) {
                 message: "Ticket ID does not exist.",
             });
         }
-
-        
-
         res.json({
             success: true,
             message: "Ticket Iteration created successfully.",

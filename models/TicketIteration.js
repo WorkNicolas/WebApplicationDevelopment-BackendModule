@@ -5,6 +5,7 @@ const TicketIterationSchema = new Schema(
     {
         ticketID: {
             type: mongoose.Schema.Types.ObjectId,
+            ref: "Ticket",
             required: true
         },
         username: {

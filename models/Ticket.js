@@ -1,8 +1,6 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const priorityEnum = ['Low', 'Medium', 'High'];
-
 const TicketSchema = new Schema(
     {
         description: {
@@ -11,7 +9,8 @@ const TicketSchema = new Schema(
         },
         priority: {
             type: String,
-            required: priorityEnum,
+            required: true,
+            enum: ['Low', 'Medium', 'High']
         },
         userId: {
             type: mongoose.Schema.Types.ObjectId,
