@@ -16,11 +16,6 @@ const TicketIterationSchema = new Schema(
             default: Date.now,
             immutable: true,
         },
-        status: {
-            type: String,
-            default: 'NEW',
-            enum: ['NEW', 'In Progress', 'Dispatched', 'Closed', 'Cancelled'],
-        },
         comment: {
             type: String,
             required: true

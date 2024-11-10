@@ -13,17 +13,3 @@
   }
 ]
 
-[
-  {
-    "username": "user",
-    "email": "user@email.com",
-    "password": "password",
-    "role": "user"
-  },
-  {
-    "username": "admin",
-    "email": "admin@company.com",
-    "password": "password",
-    "role": "admin"
-  }
-]
