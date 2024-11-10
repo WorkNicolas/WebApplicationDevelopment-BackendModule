@@ -54,19 +54,19 @@ async function generateTicketNumber() {
 
     // Find the latest ticket number for the current day
     const latestTicket = await TicketModel.findOne({
-        ticketNumber: { $regex: `^${dateStr}-` }
-    }).sort({ ticketNumber: -1 });
-
+        recordNumber: { $regex: `^${dateStr}-` }
+    }).sort({ recordNumber: -1 });
+    
     // Generate the next sequence number
     let sequence = 1;
     if (latestTicket) {
-        const lastTicketNumber = latestTicket.ticketNumber.split('-')[1];
+        const lastTicketNumber = latestTicket.recordNumber.split('-')[1];
         sequence = parseInt(lastTicketNumber, 10) + 1;
     }
 
     // Format the sequence to ensure it is always 7 digits (e.g. 0000001)
     const ticketNumber = `${dateStr}-${String(sequence).padStart(7, '0')}`;
-
+    console.log('Ticket Number: ' + ticketNumber);
     return ticketNumber;
 }
 

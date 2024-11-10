@@ -50,7 +50,7 @@ module.exports.signin = async function (req, res, next) {
     // Generates the token
     let token = jwt.sign(payload, config.SECRETKEY, {
       algorithm: "HS512",
-      expiresIn: "20min",
+      expiresIn: "365d",
     });
 
     // Sends the token in the body of the response to the client.
@@ -131,13 +131,21 @@ module.exports.requireAdmin = async function (req, res, next) {
  */
 module.exports.requireSameID = async function (req, res, next) {
   try {
+    // Ticket ID
     const ticketID = req.params.ticketID;
     console.log('Ticket ID:', ticketID);
-    const ticket = await Ticket.findById(ticketID, 'userId');
-    console.log('Ticket ID UserID:', ticket.userId.toString())
+
+    // Attached User ID
+    const ticket = await Ticket.findById(ticketID);
+    const attachedUserId = ticket.userId;
+    console.log('Attached User ID: ', attachedUserId);
+
+    // User ID
     const user = await User.findById(req.auth.id);
     console.log('User ID:', user._id.toString());
-    if (ticket.userId.toString() != user._id.toString()) {
+
+    // Comparison
+    if (attachedUserId.toString() != user._id.toString()) {
       return res.status(403).json({
         success: false,
         message: "You are not authorized to access this ticket.",
