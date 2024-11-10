@@ -131,17 +131,18 @@ module.exports.requireAdmin = async function (req, res, next) {
  */
 module.exports.requireSameID = async function (req, res, next) {
   try {
-    // Get user through auth id
-    let user = await User.findById(req.auth.id);
-
-    // Check if the userId from the User model matches the userId from the Ticket model
-    if (!ticket || ticket.userId.toString() !== user._id.toString()) {
+    const ticketID = req.params.ticketID;
+    console.log('Ticket ID:', ticketID);
+    const ticket = await Ticket.findById(ticketID, 'userId');
+    console.log('Ticket ID UserID:', ticket.userId.toString())
+    const user = await User.findById(req.auth.id);
+    console.log('User ID:', user._id.toString());
+    if (ticket.userId.toString() != user._id.toString()) {
       return res.status(403).json({
         success: false,
-        message: "Access denied: User does not own this ticket.",
+        message: "You are not authorized to access this ticket.",
       });
     }
-
     next();
   } catch (error) {
     console.log(error);

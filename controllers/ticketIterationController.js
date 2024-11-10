@@ -141,9 +141,12 @@ module.exports.update = async function (req, res, next) {
                 message: "Ticket Iteration not found."
             });
         }
+        console.log(iteration);
+        console.log('Ticket ID from iteration:', iteration.ticketID);
 
         // Check the status of the related ticket using iteration
         const ticket = await TicketModel.findById(iteration.ticketID);
+        console.log(ticket);
         if (!ticket) {
             return res.status(404).json({
                 success: false,

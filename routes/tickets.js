@@ -56,6 +56,6 @@ router.put('/edit/:ticketID', authController.requireSignin, authController.requi
  * @description Deletes a specific ticket. Requires user to be signed in.
  * @requiresAuth
  */
-router.delete('/delete/:ticketID', authController.requireSignin, authController.requireSameID, ticketController.remove);
+router.delete('/delete/:ticketID', authController.requireSignin, authController.requireAdmin, ticketController.remove);
 
 module.exports = router;

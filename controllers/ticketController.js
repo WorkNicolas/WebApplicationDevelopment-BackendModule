@@ -28,18 +28,47 @@ const TicketModel = require("../models/Ticket");
  */
 module.exports.create = async function (req, res, next) {
     try {
-        let newTicket = new TicketModel(req.body);
+        // Generate the ticket number
+        let newTicket = new TicketModel({
+            ...req.body,
+            recordNumber: await generateTicketNumber(),
+        })
 
         let result = await TicketModel.create(newTicket);
         res.json({
             success: true,
             message: "Ticket created successfully.",
         });
+
     } catch (error) {
         console.log(error);
         next(error);
     }
 };
+
+// Ticket Number Generator
+async function generateTicketNumber() {
+    // Get today's date in the format YYYYMMDD
+    const today = new Date();
+    const dateStr = today.toISOString().split('T')[0].replace(/-/g, '');
+
+    // Find the latest ticket number for the current day
+    const latestTicket = await TicketModel.findOne({
+        ticketNumber: { $regex: `^${dateStr}-` }
+    }).sort({ ticketNumber: -1 });
+
+    // Generate the next sequence number
+    let sequence = 1;
+    if (latestTicket) {
+        const lastTicketNumber = latestTicket.ticketNumber.split('-')[1];
+        sequence = parseInt(lastTicketNumber, 10) + 1;
+    }
+
+    // Format the sequence to ensure it is always 7 digits (e.g. 0000001)
+    const ticketNumber = `${dateStr}-${String(sequence).padStart(7, '0')}`;
+
+    return ticketNumber;
+}
 
 /**
  * Lists all tickets in the database.
