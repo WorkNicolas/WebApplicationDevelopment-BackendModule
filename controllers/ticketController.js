@@ -1,14 +1,34 @@
+/**
+ * Ticket controller for managing tickets in the system.
+ *
+ * @module TicketController
+ * @version 1.0.0
+ * @date 2024-11-08
+ * @description Defines various CRUD operations (Create, Read, Update, Delete) for handling tickets in the system, including ticket creation, retrieval, update, and deletion.
+ * @author Carl Nicolas Mendoza
+ */
 
-
+/** 
+ * @requires TicketModel - for performing database operations on tickets
+ */
 const TicketModel = require("../models/Ticket");
 
-/*
-create: Creates a new ticket by instantiating a TicketModel with the request body
-then saves it in the database. Responds with a success message if creation succeeds.
-*/
+/**
+ * Creates a new ticket and saves it in the database.
+ * 
+ * @function create
+ * @async
+ * @description This function instantiates a new ticket using the request body, then saves it in the database. If successful, it sends a success message as the response.
+ * @param {Object} req - The request object, which contains the ticket data in the body.
+ * @param {Object} res - The response object, which sends the success message if the ticket is created successfully.
+ * @param {function} next - The next middleware function to call if an error occurs.
+ * 
+ * @throws {Error} If there is an issue saving the ticket to the database.
+ * @returns {Object} A JSON response with a success message upon successful ticket creation.
+ */
 module.exports.create = async function (req, res, next) {
     try {
-        let newTicket = new TicketModel(req.body)
+        let newTicket = new TicketModel(req.body);
 
         let result = await TicketModel.create(newTicket);
         res.json({
@@ -21,6 +41,19 @@ module.exports.create = async function (req, res, next) {
     }
 };
 
+/**
+ * Lists all tickets in the database.
+ * 
+ * @function list
+ * @async
+ * @description Retrieves all tickets from the database and sends them as the response.
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object, which sends the list of tickets.
+ * @param {function} next - The next middleware function to call if an error occurs.
+ * 
+ * @throws {Error} If there is an issue retrieving the tickets from the database.
+ * @returns {Object} A JSON response containing the list of tickets.
+ */
 module.exports.list = async function (req, res, next) {
     try {
         let list = await TicketModel.find({});
@@ -32,6 +65,19 @@ module.exports.list = async function (req, res, next) {
     }
 };
 
+/**
+ * Retrieves a ticket from the database by its ID and assigns it to `req.ticket`.
+ * 
+ * @function ticketGet
+ * @async
+ * @description This function is a middleware that retrieves a specific ticket based on the provided ticket ID from the request parameters. The ticket is assigned to `req.ticket` for further use.
+ * @param {Object} req - The request object, which contains the ticket ID in the parameters.
+ * @param {Object} res - The response object.
+ * @param {function} next - The next middleware function to call if the ticket is found.
+ * 
+ * @throws {Error} If the ticket is not found in the database.
+ * @returns {undefined} The ticket is attached to `req.ticket` for further use.
+ */
 module.exports.ticketGet = async function (req, res, next) {
     try {
         let uID = req.params.ticketID;
@@ -44,10 +90,34 @@ module.exports.ticketGet = async function (req, res, next) {
     }
 };
 
+/**
+ * Sends the details of a specific ticket.
+ * 
+ * @function ticketByID
+ * @description This function sends the details of the ticket attached to `req.ticket` as the response.
+ * @param {Object} req - The request object, which contains the ticket attached to `req.ticket`.
+ * @param {Object} res - The response object, which sends the ticket data.
+ * @param {function} next - The next middleware function to call.
+ * 
+ * @returns {Object} A JSON response containing the ticket details.
+ */
 module.exports.ticketByID = async function (req, res, next) {
     res.json(req.ticket);
 };
 
+/**
+ * Updates an existing ticket in the database.
+ * 
+ * @function update
+ * @async
+ * @description This function updates an existing ticket with the provided data in the request body. It checks if the ticket exists, whether it's in a "Closed" status (in which case it cannot be updated), and whether the update was successful.
+ * @param {Object} req - The request object, which contains the ticket ID in the parameters and the updated data in the body.
+ * @param {Object} res - The response object, which sends the success or failure message.
+ * @param {function} next - The next middleware function to call if an error occurs.
+ * 
+ * @throws {Error} If the ticket does not exist, the status is "Closed", or if the update fails.
+ * @returns {Object} A JSON response with a success message if the ticket is updated, or an error message if the update fails.
+ */
 module.exports.update = async function (req, res, next) {
     try {
         let uID = req.params.ticketID;
@@ -89,9 +159,22 @@ module.exports.update = async function (req, res, next) {
     }
 };
 
+/**
+ * Deletes a specific ticket by its ID.
+ * 
+ * @function remove
+ * @async
+ * @description This function deletes a ticket from the database by its ID. It checks if the deletion was successful and sends an appropriate response.
+ * @param {Object} req - The request object, which contains the ticket ID in the parameters.
+ * @param {Object} res - The response object, which sends the success or failure message.
+ * @param {function} next - The next middleware function to call if an error occurs.
+ * 
+ * @throws {Error} If the ticket does not exist or if the deletion fails.
+ * @returns {Object} A JSON response with a success message if the ticket is deleted successfully, or an error message if the deletion fails.
+ */
 module.exports.remove = async function (req, res, next) {
     try {
-        let uID = req.params.ticketID
+        let uID = req.params.ticketID;
 
         let result = await TicketModel.deleteOne({ _id: uID });
 

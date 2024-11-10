@@ -1,21 +1,42 @@
+/**
+ * Ticket controller for managing tickets in the system.
+ *
+ * @module TicketController
+ * @version 1.0.0
+ * @date 2024-11-10
+ * @description Defines various CRUD operations (Create, Read, Update, Delete) for handling tickets in the system, including ticket creation, retrieval, update, and deletion.
+ * @author Carl Nicolas Mendoza
+ * 
+*/
+
+/**
+ * @requires TicketIterationModel
+ * @requires TicketModel - for performing database operations on tickets
+ */
 const TicketIterationModel = require("../models/TicketIteration");
 const TicketModel = require('../models/Ticket');
 
+/**
+ * Creates a new ticket and saves it in the database.
+ * 
+ * @function create
+ * @async
+ * @description This function instantiates a new ticket using the request body, then saves it in the database. If successful, it sends a success message as the response.
+ * @param {Object} req - The request object, which contains the ticket data in the body.
+ * @param {Object} res - The response object, which sends the success message if the ticket is created successfully.
+ * @param {function} next - The next middleware function to call if an error occurs.
+ * 
+ * @throws {Error} If there is an issue saving the ticket to the database.
+ * @returns {Object} A JSON response with a success message upon successful ticket creation.
+ */
 module.exports.create = async function (req, res, next) {
     try {
-        let result = await TicketIterationModel.create(req.body);
+        let newTicket = new TicketModel(req.body);
 
-        // Make sure that the ticket exists before creating ticket iteration
-        const ticketExists = await TicketModel.exists({ _id: req.body.ticketID });
-        if (!ticketExists) {
-            return res.status(404).json({
-                success: false,
-                message: "Ticket ID does not exist.",
-            });
-        }
+        let result = await TicketModel.create(newTicket);
         res.json({
             success: true,
-            message: "Ticket Iteration created successfully.",
+            message: "Ticket created successfully.",
         });
     } catch (error) {
         console.log(error);
@@ -23,9 +44,23 @@ module.exports.create = async function (req, res, next) {
     }
 };
 
+/**
+ * Lists all tickets in the database.
+ * 
+ * @function list
+ * @async
+ * @description Retrieves all tickets from the database and sends them as the response.
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object, which sends the list of tickets.
+ * @param {function} next - The next middleware function to call if an error occurs.
+ * 
+ * @throws {Error} If there is an issue retrieving the tickets from the database.
+ * @returns {Object} A JSON response containing the list of tickets.
+ */
 module.exports.list = async function (req, res, next) {
     try {
-        let list = await TicketIterationModel.find({});
+        let list = await TicketModel.find({});
+
         res.json(list);
     } catch (error) {
         console.log(error);
@@ -33,10 +68,24 @@ module.exports.list = async function (req, res, next) {
     }
 };
 
-module.exports.ticketIterationGet = async function (req, res, next) {
+/**
+ * Retrieves a ticket from the database by its ID and assigns it to `req.ticket`.
+ * 
+ * @function ticketGet
+ * @async
+ * @description This function is a middleware that retrieves a specific ticket based on the provided ticket ID from the request parameters. The ticket is assigned to `req.ticket` for further use.
+ * @param {Object} req - The request object, which contains the ticket ID in the parameters.
+ * @param {Object} res - The response object.
+ * @param {function} next - The next middleware function to call if the ticket is found.
+ * 
+ * @throws {Error} If the ticket is not found in the database.
+ * @returns {undefined} The ticket is attached to `req.ticket` for further use.
+ */
+module.exports.ticketGet = async function (req, res, next) {
     try {
-        let uID = req.params.ticketIterationID;
-        req.ticketIteration = await TicketIterationModel.findOne({ _id: uID });
+        let uID = req.params.ticketID;
+
+        req.ticket = await TicketModel.findOne({ _id: uID });
         next();
     } catch (error) {
         console.log(error);
@@ -44,51 +93,68 @@ module.exports.ticketIterationGet = async function (req, res, next) {
     }
 };
 
-module.exports.ticketIterationById = async function (req, res, next) {
-    res.json(req.ticketIteration);
+/**
+ * Sends the details of a specific ticket.
+ * 
+ * @function ticketByID
+ * @description This function sends the details of the ticket attached to `req.ticket` as the response.
+ * @param {Object} req - The request object, which contains the ticket attached to `req.ticket`.
+ * @param {Object} res - The response object, which sends the ticket data.
+ * @param {function} next - The next middleware function to call.
+ * 
+ * @returns {Object} A JSON response containing the ticket details.
+ */
+module.exports.ticketByID = async function (req, res, next) {
+    res.json(req.ticket);
 };
 
+/**
+ * Updates an existing ticket in the database.
+ * 
+ * @function update
+ * @async
+ * @description This function updates an existing ticket with the provided data in the request body. It checks if the ticket exists, whether it's in a "Closed" status (in which case it cannot be updated), and whether the update was successful.
+ * @param {Object} req - The request object, which contains the ticket ID in the parameters and the updated data in the body.
+ * @param {Object} res - The response object, which sends the success or failure message.
+ * @param {function} next - The next middleware function to call if an error occurs.
+ * 
+ * @throws {Error} If the ticket does not exist, the status is "Closed", or if the update fails.
+ * @returns {Object} A JSON response with a success message if the ticket is updated, or an error message if the update fails.
+ */
 module.exports.update = async function (req, res, next) {
     try {
-        let uID = req.params.ticketIterationID;
-        let result = await TicketIterationModel.updateOne(
-            { _id: uID },
-            { $set: req.body }
-        );
+        let uID = req.params.ticketID;
 
-        // This is where we will get the ticket ID from the iteration
-        const iteration = await TicketIterationModel.findById(uID);
-        if (!iteration) {
+        let updateTicket = new TicketModel(req.body);
+        updateTicket._id = uID;
+
+        let result = await TicketModel.updateOne({ _id: uID }, updateTicket);
+        
+        // Make sure that the ticket actually exists
+        const existingTicket = await TicketModel.findById(uID);
+        if (!existingTicket) {
             return res.status(404).json({
                 success: false,
-                message: "Ticket Iteration not found."
+                message: "Ticket not found."
             });
         }
 
-        // Check the status of the related ticket using iteration
-        const ticket = await TicketModel.findById(iteration.ticketID);
-        if (!ticket) {
-            return res.status(404).json({
-                success: false,
-                message: "Related Ticket not found."
-            });
-        }
-
-        // Ticket iterations of closed tickets cannot be updated
-        if (ticket.status === "Closed") {
+        // Check if status is "Closed"
+        if (existingTicket.status === "Closed") {
             return res.status(400).json({
                 success: false,
-                message: "Cannot update iteration for a closed ticket."
+                message: "Cannot update a closed ticket."
             });
         }
-
+        
         if (result.modifiedCount > 0) {
             res.json({
                 success: true,
-                message: "Ticket Iteration updated successfully.",
-            });
+                message: "Ticket updated successfully.",
+            })
         } else {
-            throw new Error("Ticket Iteration not updated. Are you sure it exists?");
+            // Express will catch this on its own.
+            throw new Error("Ticket not updated. Are you sure it exists?");
         }
     } catch (error) {
         console.log(error);
@@ -96,21 +162,36 @@ module.exports.update = async function (req, res, next) {
     }
 };
 
+/**
+ * Deletes a specific ticket by its ID.
+ * 
+ * @function remove
+ * @async
+ * @description This function deletes a ticket from the database by its ID. It checks if the deletion was successful and sends an appropriate response.
+ * @param {Object} req - The request object, which contains the ticket ID in the parameters.
+ * @param {Object} res - The response object, which sends the success or failure message.
+ * @param {function} next - The next middleware function to call if an error occurs.
+ * 
+ * @throws {Error} If the ticket does not exist or if the deletion fails.
+ * @returns {Object} A JSON response with a success message if the ticket is deleted successfully, or an error message if the deletion fails.
+ */
 module.exports.remove = async function (req, res, next) {
     try {
-        let uID = req.params.ticketIterationID;
-        let result = await TicketIterationModel.deleteOne({ _id: uID });
+        let uID = req.params.ticketID;
+
+        let result = await TicketModel.deleteOne({ _id: uID });
 
         if (result.deletedCount > 0) {
             res.json({
                 success: true,
-                message: "Ticket Iteration deleted successfully.",
+                message: "Ticket deleted successfully.",
             });
         } else {
-            throw new Error("Ticket Iteration not deleted. Are you sure it exists?");
-        }
+            // Express will catch this on its own
+            throw new Error("Ticket not deleted. Are you sure it exists?");
+        } 
     } catch (error) {
         console.log(error);
         next(error);
     }
-};
+}
