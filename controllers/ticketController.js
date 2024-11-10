@@ -1,5 +1,11 @@
+
+
 const TicketModel = require("../models/Ticket");
 
+/*
+create: Creates a new ticket by instantiating a TicketModel with the request body
+then saves it in the database. Responds with a success message if creation succeeds.
+*/
 module.exports.create = async function (req, res, next) {
     try {
         let newTicket = new TicketModel(req.body)
@@ -50,7 +56,24 @@ module.exports.update = async function (req, res, next) {
         updateTicket._id = uID;
 
         let result = await TicketModel.updateOne({ _id: uID }, updateTicket);
+        
+        // Make sure that the ticket actually exists
+        const existingTicket = await TicketModel.findById(uID);
+        if (!existingTicket) {
+            return res.status(404).json({
+                success: false,
+                message: "Ticket not found."
+            });
+        }
 
+        // Check if status is "Closed"
+        if (existingTicket.status === "Closed") {
+            return res.status(400).json({
+                success: false,
+                message: "Cannot update a closed ticket."
+            });
+        }
+        
         if (result.modifiedCount > 0) {
             res.json({
                 success: true,
