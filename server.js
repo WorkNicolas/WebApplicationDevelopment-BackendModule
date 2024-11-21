@@ -8,7 +8,7 @@ const db = require("./config/mongoose");
 const app = require("./config/express");
 const debug = require("debug")("webapplicationdevelopment-backendmodule:server");
 const http = require("http");
-
+require("dotenv").config();
 /**
  * Get port from environment and store in Express.
  */

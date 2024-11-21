@@ -43,6 +43,9 @@ const UserSchema = new Schema(
       unique: true,
       match: [/.+\@.+\..+/, "Please fill a valid e-mail address."],
     },
+    phone: {
+      type: String,
+    },
     hashed_password: {
       type: String,
       required: true,
