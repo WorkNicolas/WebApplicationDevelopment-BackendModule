@@ -19,7 +19,7 @@ const createError = require("http-errors");
 const express = require("express");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
-
+const cors = require("cors");
 /**
  * Import Routers
  * @requires indexRouter
@@ -37,6 +37,9 @@ const app = express();
 
 
 // Middleware Setup
+app.use(cors());
+app.options("*", cors());
+
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
