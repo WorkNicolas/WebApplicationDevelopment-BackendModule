@@ -13,7 +13,8 @@
  * @requires UserModel - for performing database operations on user records
  */
 const UserModel = require("../models/User");
-
+const jwt = require("jsonwebtoken");
+const config = require("../config/config");
 /**
  * Creates a new user in the system.
  * 
@@ -32,10 +33,23 @@ module.exports.create = async function (req, res, next) {
     let newUser = new UserModel(req.body);
 
     let result = await UserModel.create(newUser);
+
+    let payload = { 
+      id: result._id,
+      username: result.username,
+    };
+
+    let token = jwt.sign(payload, config.SECRETKEY, {
+      algorithm: "HS512",
+      expiresIn: "365d",
+    });
+
     res.json({
       success: true,
       message: "User created successfully.",
+      token: token,
     });
+
   } catch (error) {
     console.log(error);
     next(error);
