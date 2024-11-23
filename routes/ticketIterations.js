@@ -54,7 +54,8 @@ router.post('/create', authController.requireSignin, ticketIterationController.c
  * 
  * @returns {void} Calls the `list` method in the `ticketIterationController` to get and list ticket iterations.
  */
-router.get('/list', authController.requireSignin, ticketIterationController.list);
+//router.get('/list', authController.requireSignin, ticketIterationController.list);
+router.get('/list', ticketIterationController.list);
 
 /**
  * Handles the GET request for fetching a specific ticket iteration by its ID.
@@ -67,7 +68,8 @@ router.get('/list', authController.requireSignin, ticketIterationController.list
  * 
  * @returns {void} Calls `ticketIterationGet` to retrieve the ticket iteration and `ticketIterationById` to return the iteration data.
  */
-router.get('/get/:ticketIterationID', authController.requireSignin, authController.requireAdmin, ticketIterationController.ticketIterationGet, ticketIterationController.ticketIterationById);
+//router.get('/get/:ticketIterationID', authController.requireSignin, authController.requireAdmin, ticketIterationController.ticketIterationGet, ticketIterationController.ticketIterationById);
+router.get('/get/:ticketIterationID', ticketIterationController.ticketIterationGet, ticketIterationController.ticketIterationById);
 
 /**
  * Handles the PUT request to edit a ticket iteration.
