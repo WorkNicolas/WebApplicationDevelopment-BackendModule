@@ -30,7 +30,8 @@ router.get("/", function (req, res, next) {
  * @description Creates a new ticket. Requires user to be signed in.
  * @requiresAuth
  */
-router.post('/create', authController.requireSignin, ticketController.create);
+// router.post('/create', authController.requireSignin, ticketController.create);
+router.post('/create', ticketController.create);
 
 /**
  * @route GET /api/ticket/list
