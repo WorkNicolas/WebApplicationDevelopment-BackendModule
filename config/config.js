@@ -19,7 +19,6 @@
  * @property {string} SECRETKEY - The secret key used for cryptographic operations, such as signing tokens.
  */
 module.exports = {
-  ATLASDB:
-    "mongodb+srv://grp6ticket:BuD9mr4fYX6ppNVz@cluster0.cffsw.mongodb.net/",
-  SECRETKEY: "YBqV&O3VFiV5dGXrAX/10$q_,yPRq",
+  ATLASDB: process.env.ATLASDB,
+  SECRETKEY: process.env.SECRETKEY,
 };
