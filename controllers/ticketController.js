@@ -1,3 +1,5 @@
+const mongoose = require("mongoose");
+
 /**
  * Ticket controller for managing tickets in the system.
  *
@@ -131,7 +133,29 @@ module.exports.ticketGet = async function (req, res, next) {
  * @returns {Object} A JSON response containing the ticket details.
  */
 module.exports.ticketByID = async function (req, res, next) {
-    res.json(req.ticket);
+    try {
+        let uID = new mongoose.Types.ObjectId(req.params.ticketID);
+
+        let result = await TicketModel.aggregate([
+            {
+                $match: { _id: uID }
+            },
+            {
+                $lookup: {
+                    from: "ticketiterations", // The collection name in MongoDB
+                    localField: "_id",
+                    foreignField: "ticketID",
+                    as: "iterations"
+                }
+            }
+        ]);
+        console.log("result:", result);
+
+        res.json(result);
+    } catch (error) {
+        console.log(error);
+        next(error);
+    }
 };
 
 /**
