@@ -30,32 +30,37 @@ router.get("/", function (req, res, next) {
  * @description Creates a new ticket. Requires user to be signed in.
  * @requiresAuth
  */
-router.post('/create', authController.requireSignin, ticketController.create);
+// router.post('/create', authController.requireSignin, ticketController.create);
+router.post('/create', ticketController.create);
 
 /**
  * @route GET /api/ticket/list
  * @description Lists all tickets in the system.
  */
-router.get('/list', authController.requireSignin, authController.requireAdmin, ticketController.list);
+//router.get('/list', authController.requireSignin, authController.requireAdmin, ticketController.list);
+router.get('/list', ticketController.list);
 
 /**
  * @route GET /api/ticket/get/:ticketID
  * @description Retrieves a specific ticket by its ID.
  */
-router.get('/get/:ticketID', authController.requireSignin, authController.requireSameID, ticketController.ticketGet, ticketController.ticketByID);
+//router.get('/get/:ticketID', authController.requireSignin, authController.requireSameID, ticketController.ticketGet, ticketController.ticketByID);
+router.get('/get/:ticketID', ticketController.ticketByID);
 
 /**
  * @route PUT /api/ticket/edit/:ticketID
  * @description Updates a specific ticket. Requires user to be signed in.
  * @requiresAuth
  */
-router.put('/edit/:ticketID', authController.requireSignin, authController.requireSameID, ticketController.update);
+// router.put('/edit/:ticketID', authController.requireSignin, authController.requireSameID, ticketController.update);
+router.put('/edit/:ticketID', ticketController.update);
 
 /**
  * @route DELETE /api/ticket/delete/:ticketID
  * @description Deletes a specific ticket. Requires user to be signed in.
  * @requiresAuth
  */
-router.delete('/delete/:ticketID', authController.requireSignin, authController.requireAdmin, ticketController.remove);
+// router.delete('/delete/:ticketID', authController.requireSignin, authController.requireAdmin, ticketController.remove);
+router.delete('/delete/:ticketID', ticketController.remove);
 
 module.exports = router;

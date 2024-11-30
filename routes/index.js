@@ -27,7 +27,7 @@ const router = express.Router();
  * @returns {void} Renders the 'index' view with a title of 'Express' on a successful GET request.
  */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+  return res.send('web application Be');
 });
 
 module.exports = router;
