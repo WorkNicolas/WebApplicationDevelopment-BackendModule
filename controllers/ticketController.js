@@ -147,9 +147,16 @@ module.exports.ticketByID = async function (req, res, next) {
                     foreignField: "ticketID",
                     as: "iterations"
                 }
+            },
+            {
+                $lookup: {
+                    from: "users", 
+                    localField: "userId", 
+                    foreignField: "_id", 
+                    as: "userDetails"
+                }
             }
         ]);
-        console.log("result:", result);
 
         res.json(result);
     } catch (error) {
