@@ -12,7 +12,9 @@ router.get("/", function (req, res, next) {
 router.post("/signin", authController.signin);
 
 router.get("/list", authController.requireSignin, usersController.list);
-router.post("/create", authController.requireSignin, usersController.create);
+
+// for create user, no requireSignin
+router.post("/create", usersController.create);
 router.get("/get/:userID", authController.requireSignin, usersController.userGet, usersController.userByID);
 
 // requires signing in
