@@ -37,6 +37,7 @@ module.exports.create = async function (req, res, next) {
     let payload = { 
       id: result._id,
       username: result.username,
+      role: result.role,
     };
 
     let token = jwt.sign(payload, config.SECRETKEY, {
@@ -136,16 +137,27 @@ module.exports.userByID = async function (req, res, next) {
 module.exports.update = async function (req, res, next) {
   try {
     let uID = req.params.userID;
-
     let updateUser = new UserModel(req.body);
     updateUser._id = uID;
 
     let result = await UserModel.updateOne({ _id: uID }, updateUser);
 
+    let payload = {
+      id: uID,
+      username: updateUser.username,
+      role: updateUser.role,
+    };
+
+    let token = jwt.sign(payload, config.SECRETKEY, {
+      algorithm: "HS512",
+      expiresIn: "365d",
+    });
+
     if (result.modifiedCount > 0) {
       res.json({
         success: true,
         message: "User updated successfully.",
+        token: token,
       });
     } else {
       // Express will catch this on its own.
