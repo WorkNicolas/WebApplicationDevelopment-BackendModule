@@ -113,14 +113,13 @@ module.exports.ticketGet = async function (req, res, next) {
     try {
         let uID = req.params.ticketID;
 
-        req.ticket = await TicketModel.findOne({ _id: uID }).populate('userId');  // Populate userId with user details
+        req.ticket = await TicketModel.findOne({ _id: uID });
         next();
     } catch (error) {
         console.log(error);
         next(error);
     }
 };
-
 
 /**
  * Sends the details of a specific ticket.
@@ -156,6 +155,11 @@ module.exports.ticketByID = async function (req, res, next) {
                     foreignField: "_id", 
                     as: "userDetails"
                 }
+            },
+            {
+                $unwind: {
+                    path: "$userDetails",
+                }
             }
         ]);
 
@@ -165,7 +169,6 @@ module.exports.ticketByID = async function (req, res, next) {
         next(error);
     }
 };
-
 
 /**
  * Updates an existing ticket in the database.
