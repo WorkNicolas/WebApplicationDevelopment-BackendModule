@@ -45,6 +45,7 @@ module.exports.signin = async function (req, res, next) {
     let payload = {
       id: user._id,
       username: user.username,
+      role: user.role,
     };
 
     // Generates the token
