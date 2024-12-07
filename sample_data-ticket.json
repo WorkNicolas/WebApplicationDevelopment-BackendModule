@@ -1,0 +1,14 @@
+[
+    {
+      "description": "Issue with the login functionality on the main website",
+      "priority": "High",
+      "userId": "TODO"
+    },
+    {
+          "description": "Server downtime in production environment",
+      "priority": "High",
+      "userId": "TODO",
+      "status": "In Progress",
+      "resolution": "Restarted server and monitored logs for stability."
+    }
+  ]
