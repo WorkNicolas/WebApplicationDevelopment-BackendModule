@@ -184,8 +184,6 @@ module.exports.update = async function (req, res, next) {
 
         let updateTicket = new TicketModel(req.body);
         updateTicket._id = uID;
-
-        let result = await TicketModel.updateOne({ _id: uID }, updateTicket);
         
         // Make sure that the ticket actually exists
         const existingTicket = await TicketModel.findById(uID);
@@ -204,6 +202,8 @@ module.exports.update = async function (req, res, next) {
             });
         }
         
+        let result = await TicketModel.updateOne({ _id: uID }, updateTicket);
+
         if (result.modifiedCount > 0) {
             res.json({
                 success: true,
