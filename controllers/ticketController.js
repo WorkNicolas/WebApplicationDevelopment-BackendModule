@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const UserModel = require("../models/User");
 
 /**
  * Ticket controller for managing tickets in the system.
@@ -87,7 +88,15 @@ async function generateTicketNumber() {
  */
 module.exports.list = async function (req, res, next) {
     try {
-        let list = await TicketModel.find({});
+        let list;
+        let userID = req.params.userID;
+        let user = await UserModel.findById(userID);
+
+        if(user?.role === 'admin') {
+            list = await TicketModel.find({});
+        } else {
+            list = await TicketModel.find({ userId: userID });
+        }
 
         res.json(list);
     } catch (error) {

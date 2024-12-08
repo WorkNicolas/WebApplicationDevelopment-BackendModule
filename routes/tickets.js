@@ -38,7 +38,7 @@ router.post('/create', authController.requireSignin, ticketController.create);
  * @description Lists all tickets in the system.
  */
 //router.get('/list', authController.requireSignin, authController.requireAdmin, ticketController.list);
-router.get('/list', authController.requireSignin, ticketController.list);
+router.get('/list/:userID', authController.requireSignin, ticketController.list);
 
 /**
  * @route GET /api/ticket/get/:ticketID
