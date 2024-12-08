@@ -1,4 +1,11 @@
 /**
+Mendoza, Carl Nicolas – 301386435
+To, Cheuk Man Edmond– 301378748
+Dou, Fang – 301381266
+HUI, LIT TUNG – 301387861
+**/
+
+/**
  * Database connection setup using Mongoose and MongoDB Atlas.
  *
  * @module database

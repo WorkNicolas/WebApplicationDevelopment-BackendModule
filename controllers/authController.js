@@ -1,4 +1,11 @@
 /**
+Mendoza, Carl Nicolas – 301386435
+To, Cheuk Man Edmond– 301378748
+Dou, Fang – 301381266
+HUI, LIT TUNG – 301387861
+**/
+
+/**
  * Authentication controller for user login and role-based access control.
  *
  * @module AuthController
